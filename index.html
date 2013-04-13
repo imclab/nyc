@@ -5,7 +5,6 @@
 
   <script type="text/javascript" src="src/third-party/Three.js"></script>
   <script type="text/javascript" src="src/third-party/RequestAnimationFrame.js"></script>
-  <script type="text/javascript" src="src/third-party/Stats.js"></script>
   <script type="text/javascript" src="src/third-party/jquery-1.5.2.js"></script>
 
   <style type="text/css">
@@ -97,16 +96,6 @@
     "LowPolyWall_2": "facade12_color.jpg"
     };
 
-    $.ajax({
-        url: 'models/',
-        success: function(data) {
-          $(data).find('a').each(function(i){
-              if ($(this).text().search(".js") != -1) { allModels.push($(this).text().replace(" ", "")); }
-          });
-          loadModels(0);
-        }
-    });
-
     function loadModels(id){
         var loader = new THREE.JSONLoader();
         loader.load( { model: 'models/'+allModels[id], callback: function(g){
@@ -122,7 +111,7 @@
 
     var cityGeometry;
 
-    var container, stats;
+    var container;
     var camera, scene, renderer;
     var light = [];
 
@@ -136,10 +125,6 @@
 
       container.appendChild( renderer.domElement );
 
-      stats = new Stats();
-      stats.domElement.style.position = 'absolute';
-      stats.domElement.style.top = '24px';
-      container.appendChild( stats.domElement );
 
       scene = new THREE.Scene();
 
@@ -167,6 +152,17 @@
       scene.addChild(sky)
 
       animate();
+
+      $.ajax({
+        url: 'models/',
+        success: function(data) {
+          $(data).find('a').each(function(i){
+              if ($(this).text().search(".js") != -1) { allModels.push($(this).text().replace(" ", "")); }
+          });
+          loadModels(0);
+        }
+      });
+
     }
 
 
@@ -174,7 +170,6 @@
     function animate() {
       requestAnimationFrame( animate );
       render();
-      stats.update();
     }
 
     function render() {
@@ -198,12 +193,5 @@
 </script>
 </head>
 <body>
-<a href="https://twitter.com/share" class="twitter-share-button" data-via="xyz_ak">Tweet</a>
-<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
-<a href="https://twitter.com/xyz_ak" class="twitter-follow-button" data-show-count="false">Follow @xyz_ak</a>
-<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
-<div id="info">
-  <a href="http://github.com/mrdoob/three.js" target="_blank">three.js</a> - <a href="http://www.procedural.com/cityengine/examples/new-york-city-2259.html">New York City 2259 (lowest detail level) by Procedural &copy;2011. Controls: <strong>Q, W, E, A, S, D</strong>
-</div>
 </body>
 </html>
